@@ -1,9 +1,12 @@
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../Redux/action";
-
 import { FilterInput, Label } from "./Filter.styled";
+import { getFilter } from "../../Redux/selectors";
 
-const Filter = ({ filter, filterChange }) => {
+export default function Filter() {
+  const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
+  const filterChange = (e) => dispatch(actions.filterChange(e.target.value));
   return (
     <Label>
       Find contact by name
@@ -16,18 +19,4 @@ const Filter = ({ filter, filterChange }) => {
       />
     </Label>
   );
-};
-
-const mapStateToProps = (state) => {
-  return {
-    filter: state.items.filter,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    filterChange: (e) => dispatch(actions.filterChange(e.target.value)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+}

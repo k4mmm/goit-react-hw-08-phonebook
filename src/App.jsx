@@ -1,49 +1,25 @@
 import { useEffect } from "react";
-import { connect } from "react-redux";
-import * as actions from "./Redux/action";
+import { useSelector } from "react-redux";
 import Filter from "./Components/Filter/Filter";
-import { ContactForm } from "./Components/ContactForm/ContactForm";
-import { ContactList } from "./Components/ContactList/ContactList";
+import ContactForm from "./Components/ContactForm/ContactForm";
+import ContactList from "./Components/ContactList/ContactList";
 import { MainTitle, Title, PhonebookSection } from "./App.styled";
+import { getContacts } from "./Redux/selectors";
 
-const App = ({ contacts, filter, addContact, deleteContact }) => {
+export default function App() {
+  const contacts = useSelector(getContacts);
+
   useEffect(() => {
     localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts]);
 
-  const visibleContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter((item) =>
-      item.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
   return (
     <PhonebookSection>
       <MainTitle>Phonebook</MainTitle>
-      <ContactForm submit={addContact} />
+      <ContactForm />
       <Title>Contacts</Title>
       <Filter />
-      <ContactList
-        deleteContact={deleteContact}
-        visibleContacts={visibleContacts()}
-      />
+      <ContactList />
     </PhonebookSection>
   );
-};
-
-const mapStateToProps = (state) => {
-  return {
-    contacts: state.items.contacts,
-    filter: state.items.filter,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addContact: (data) => dispatch(actions.addContact(data)),
-    deleteContact: (data) => dispatch(actions.deleteContact(data)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+}

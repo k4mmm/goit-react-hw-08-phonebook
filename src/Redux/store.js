@@ -1,52 +1,13 @@
-import { createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-const initialState = {
-  items: {
-    contacts: JSON.parse(localStorage.getItem("contacts")) ?? [],
-    filter: "",
+import logger from "redux-logger";
+import { configureStore } from "@reduxjs/toolkit";
+import contactsReducer from "./contactsReducer";
+
+const store = configureStore({
+  reducer: {
+    items: contactsReducer,
   },
-};
-
-const reducer = (state = initialState, { type, payload }) => {
-  switch (type) {
-    case "deleteContact":
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          contacts: state.items.contacts.filter(
-            (contact) => contact.id !== payload.id
-          ),
-        },
-      };
-
-    case "addContact":
-      const findContact = state.items.contacts.find((contact) => {
-        return contact.name === payload.name;
-      });
-      return !findContact
-        ? {
-            ...state,
-            items: {
-              ...state.items,
-              contacts: [payload, ...state.items.contacts],
-            },
-          }
-        : alert(`${payload.name} is already in contact`);
-
-    case "filterChange":
-      return {
-        ...state,
-        items: {
-          ...state.items,
-          filter: payload,
-        },
-      };
-
-    default:
-      return state;
-  }
-};
-const store = createStore(reducer, composeWithDevTools());
+  middleware: [logger],
+  devTools: process.env.NODE_ENV !== "production",
+});
 
 export default store;
