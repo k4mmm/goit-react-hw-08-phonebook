@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { Form, Input, Label, ButtonAdd } from "./ContactForm.styled";
-import * as actions from "../../Redux/action";
+import { addNewContact } from "../../Redux/contactsOperations";
+import { getContacts } from "../../Redux/selectors";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const dispatch = useDispatch();
+  const prevContacts = useSelector(getContacts);
 
   const reset = () => {
     setName("");
@@ -36,7 +38,10 @@ export default function ContactForm() {
       id,
       number,
     };
-    dispatch(actions.addContact(contactData));
+    const findContacts = prevContacts.find((contact) => contact.name === name);
+    !findContacts
+      ? dispatch(addNewContact(contactData))
+      : alert(`${name} is already in contact`);
     reset();
   };
 

@@ -1,22 +1,22 @@
 import * as actions from "./action";
 import { createReducer, combineReducers } from "@reduxjs/toolkit";
+import {
+  fetchContacts,
+  addNewContact,
+  deleteContact,
+} from "./contactsOperations";
 
-const contacts = createReducer(
-  JSON.parse(localStorage.getItem("contacts")) ?? [],
-  {
-    [actions.deleteContact]: (state, { payload }) =>
-      state.filter((contact) => contact.id !== payload.id),
+const contacts = createReducer([], {
+  [fetchContacts.fulfilled]: (_, { payload }) => payload,
+  [addNewContact.fulfilled]: (_, { payload }) => payload,
+  [deleteContact.fulfilled]: (_, { payload }) => payload,
+});
 
-    [actions.addContact]: (state, { payload }) => {
-      const findContact = state.find((contact) => {
-        return contact.name === payload.name;
-      });
-      return !findContact
-        ? [payload, ...state]
-        : alert(`${payload.name} is already in contact`);
-    },
-  }
-);
+const isLoading = createReducer(false, {
+  [fetchContacts.pending]: () => true,
+  [fetchContacts.fulfilled]: () => false,
+  [fetchContacts.rejected]: () => false,
+});
 
 const filter = createReducer("", {
   [actions.filterChange]: (_, { payload }) => payload,
@@ -25,4 +25,5 @@ const filter = createReducer("", {
 export default combineReducers({
   contacts,
   filter,
+  isLoading,
 });

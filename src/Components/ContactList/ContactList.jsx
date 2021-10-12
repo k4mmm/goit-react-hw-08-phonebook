@@ -1,14 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { ButtonDelete, ContactItem, List } from "./ContactList.styled";
-import * as actions from "../../Redux/action";
-import { getVisibleContacts } from "../../Redux/selectors";
+import { getVisibleContacts, getIsLoading } from "../../Redux/selectors";
+import { fetchContacts, deleteContact } from "../../Redux/contactsOperations";
 
 export default function ContactList() {
   const dispatch = useDispatch();
   const visibleContacts = useSelector(getVisibleContacts);
+  const isLoading = useSelector(getIsLoading);
+  useEffect(() => dispatch(fetchContacts()), [dispatch]);
 
   return (
     <List>
+      {isLoading && <p>Loading...</p>}
       {visibleContacts.map((contact) => {
         return (
           <ContactItem key={contact.id}>
@@ -16,7 +20,7 @@ export default function ContactList() {
             <ButtonDelete
               type="submit"
               onClick={() => {
-                dispatch(actions.deleteContact(contact));
+                dispatch(deleteContact(contact.id));
               }}
             >
               Delete
