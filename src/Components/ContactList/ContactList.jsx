@@ -1,8 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { ButtonDelete, ContactItem, List } from "./ContactList.styled";
-import { getVisibleContacts, getIsLoading } from "../../Redux/selectors";
-import { fetchContacts, deleteContact } from "../../Redux/contactsOperations";
+import {
+  getVisibleContacts,
+  getIsLoading,
+} from "../../Redux/contacts/contactsSelectors";
+import {
+  fetchContacts,
+  deleteContact,
+} from "../../Redux/contacts/contactsOperations";
 
 export default function ContactList() {
   const dispatch = useDispatch();

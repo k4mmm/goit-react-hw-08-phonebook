@@ -1,4 +1,4 @@
-import * as actions from "./action";
+import * as actions from "./contactsAction";
 import { createReducer, combineReducers } from "@reduxjs/toolkit";
 import {
   fetchContacts,
