@@ -4,14 +4,15 @@ import styled from "@emotion/styled";
 export const StyledLink = styled(Link)`
   font-size: 50px;
   text-decoration: none;
-  color: saddlebrown;
-  transition: color 250ms linear;
+  color: #1976d2;
+  transition: color 300ms linear;
+  font-weight: 200;
   &:first-of-type {
-    margin-right: 50px;
+    margin-right: 100px;
   }
   &:active,
   &:hover {
-    color: #696869;
+    color: #0057bb;
   }
 `;
 
@@ -19,6 +20,6 @@ export const StyledDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #d5bdd8;
+  background-color: #fff;
   height: 100vh;
 `;
