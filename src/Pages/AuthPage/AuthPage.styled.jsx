@@ -49,6 +49,7 @@ export const StyledButton = styled.button`
   &:focus {
     color: #fff;
     background-color: saddlebrown;
+    border: solid black;
   }
 `;
 
