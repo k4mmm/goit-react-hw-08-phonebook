@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { Form, Input, Label, ButtonAdd } from "./ContactForm.styled";
+
 import { addNewContact } from "../../Redux/contacts/contactsOperations";
 import { getContacts } from "../../Redux/contacts/contactsSelectors";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
@@ -46,34 +51,63 @@ export default function ContactForm() {
   };
 
   return (
-    <Form onSubmit={addContact}>
-      <Label>
-        Name:
-        <Input
+    <Box
+      sx={{
+        marginTop: 8,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <ContactPhoneIcon />
+        </Avatar>
+      </Box>
+
+      <Box
+        component="form"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          "& > :not(style)": { m: 1, width: "25ch" },
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={addContact}
+      >
+        <TextField
+          id="outlined-basic"
+          label="Name"
+          variant="outlined"
           type="text"
           name="name"
           onChange={inputChange}
           value={name}
           placeholder="New contact name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
           required
         />
-      </Label>
-      <Label>
-        Tel:
-        <Input
+        <TextField
+          id="outlined-basic"
+          label="Number"
+          variant="outlined"
           type="tel"
           name="number"
           value={number}
           placeholder="New contact number"
           onChange={inputChange}
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
           required
         />
-      </Label>
-      <ButtonAdd type="submit">Add contact</ButtonAdd>
-    </Form>
+        <Button variant="contained" type="submit">
+          Add contact
+        </Button>
+      </Box>
+    </Box>
   );
 }
