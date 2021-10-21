@@ -1,5 +1,5 @@
 import { StyledLink, StyledDiv } from "./HomePage.styled";
-import React from "react";
+
 const HomePage = () => {
   return (
     <StyledDiv>

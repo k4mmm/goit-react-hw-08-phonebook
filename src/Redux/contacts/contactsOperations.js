@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 import {
   getContacts,
   addContact,
@@ -11,7 +12,8 @@ export const fetchContacts = createAsyncThunk(
     try {
       return await getContacts();
     } catch (error) {
-      return rejectWithValue(error);
+      toast.error("Contacts undefinded");
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -26,7 +28,8 @@ export const addNewContact = createAsyncThunk(
       }
       return await getContacts();
     } catch (error) {
-      return rejectWithValue(error);
+      toast.error("Error creating contact. Missing required fields.");
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -41,7 +44,8 @@ export const deleteContact = createAsyncThunk(
       }
       return await getContacts();
     } catch (error) {
-      return rejectWithValue(error);
+      toast.error("Server error");
+      return rejectWithValue(error.message);
     }
   }
 );

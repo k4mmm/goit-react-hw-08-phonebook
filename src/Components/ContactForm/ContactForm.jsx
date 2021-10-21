@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
-
-import { addNewContact } from "../../Redux/contacts/contactsOperations";
-import { getContacts } from "../../Redux/contacts/contactsSelectors";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import { addNewContact } from "../../Redux/contacts/contactsOperations";
+import { getContacts } from "../../Redux/contacts/contactsSelectors";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
+
   const dispatch = useDispatch();
   const prevContacts = useSelector(getContacts);
 
@@ -37,10 +36,8 @@ export default function ContactForm() {
 
   const addContact = (e) => {
     e.preventDefault();
-    let id = uuidv4();
     const contactData = {
       name,
-      id,
       number,
     };
     const findContacts = prevContacts.find((contact) => contact.name === name);

@@ -3,9 +3,11 @@ import { logOut } from "../../Redux/auth/authOperations";
 import { getUserEmail } from "../../Redux/auth/authSelectors";
 import defaultAvatar from "./default-avatar.png";
 import { StyledDiv, StyledBotton, StyledP } from "./Menu.styled";
+
 const Menu = () => {
   const dispatch = useDispatch();
   const userEmail = useSelector(getUserEmail);
+
   return (
     <header>
       <StyledDiv>
@@ -22,4 +24,5 @@ const Menu = () => {
     </header>
   );
 };
+
 export default Menu;

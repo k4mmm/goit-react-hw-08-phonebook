@@ -1,12 +1,13 @@
 import { Switch } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
-import Menu from "./Components/Menu/Menu";
 import { useSelector, useDispatch } from "react-redux";
+import Menu from "./Components/Menu/Menu";
 import { StyledCircularProgress, Container } from "./App.styled";
 import { getLoggedIn, getRefreshing } from "./Redux/auth/authSelectors";
 import { currentUser } from "./Redux/auth/authOperations";
 import PrivateRoute from "./Components/PrivateRoute";
 import PublicRoute from "./Components/PublicRoute";
+import { Toaster } from "react-hot-toast";
 
 const HomePage = lazy(() => import("./Pages/HomePage/HomePage"));
 const RegPage = lazy(() => import("./Pages/RegPage/RegPage"));
@@ -43,6 +44,7 @@ export default function App() {
             </PrivateRoute>
           </Suspense>
         </Switch>
+        <Toaster position="top-right" />
       </Container>
     )
   );
