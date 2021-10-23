@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
@@ -11,35 +10,22 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { register } from "../../Redux/auth/authOperations";
+import { register as registration } from "../../Redux/auth/authOperations";
+import { useForm } from "react-hook-form";
 
 const theme = createTheme();
 
 export default function SignUp() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(register({ name, email, password }));
-    setName("");
-    setEmail("");
-    setPassword("");
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const hendleChange = ({ target: { name, value } }) => {
-    switch (name) {
-      case "name":
-        return setName(value);
-      case "email":
-        return setEmail(value);
-      case "password":
-        return setPassword(value);
-      default:
-        return;
-    }
+  const Submit = (data) => {
+    dispatch(registration(data));
   };
 
   return (
@@ -63,45 +49,103 @@ export default function SignUp() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(Submit)}
             sx={{ mt: 3 }}
           >
-            <Grid container spacing={2}>
+            <Grid container spacing={3}>
               <Grid item xs={12}>
-                <TextField
-                  onChange={hendleChange}
-                  name="name"
-                  required
-                  fullWidth
-                  value={name}
-                  id="name"
-                  label="Name"
-                  autoFocus
-                />
+                {errors.name ? (
+                  <TextField
+                    error
+                    id="outlined-error"
+                    label="Incorrect Name"
+                    name="name"
+                    required
+                    fullWidth
+                    autoFocus
+                    {...register("name", {
+                      required: true,
+                      maxLength: 80,
+                      minLength: 1,
+                    })}
+                    helperText="Does not include numbers."
+                  />
+                ) : (
+                  <TextField
+                    name="name"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Name"
+                    autoFocus
+                    {...register("name", {
+                      required: true,
+                      maxLength: 80,
+                      minLength: 1,
+                    })}
+                  />
+                )}
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
-                  onChange={hendleChange}
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  value={email}
-                />
+                {errors.email ? (
+                  <TextField
+                    error
+                    id="outlined-error"
+                    label="Incorrect Email"
+                    required
+                    fullWidth
+                    name="email"
+                    {...register("email", {
+                      required: true,
+                      pattern: /^\S+@\S+$/i,
+                    })}
+                    helperText="example@example.com"
+                  />
+                ) : (
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    {...register("email", {
+                      required: true,
+                      pattern: /^\S+@\S+$/i,
+                    })}
+                  />
+                )}
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  onChange={hendleChange}
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  value={password}
-                />
+                {errors.password ? (
+                  <TextField
+                    error
+                    id="outlined-error"
+                    label="Incorrect Password"
+                    required
+                    fullWidth
+                    name="password"
+                    type="password"
+                    {...register("password", {
+                      required: true,
+                      pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                    })}
+                    helperText="Min 8 numbers and letters."
+                  />
+                ) : (
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    {...register("password", {
+                      required: true,
+                      pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                    })}
+                  />
+                )}
               </Grid>
             </Grid>
             <Button

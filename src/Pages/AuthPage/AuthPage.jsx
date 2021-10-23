@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -13,31 +12,22 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { logIn } from "../../Redux/auth/authOperations";
 
+import { useForm } from "react-hook-form";
+
 const theme = createTheme();
 
 export default function SignIn() {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    dispatch(logIn({ email, password }));
-    setEmail("");
-    setPassword("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const Submit = (data) => {
+    dispatch(logIn(data));
   };
-
-  const hendleChange = ({ target: { name, value } }) => {
-    switch (name) {
-      case "email":
-        return setEmail(value);
-      case "password":
-        return setPassword(value);
-      default:
-        return;
-    }
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -58,32 +48,73 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(Submit)}
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
-              onChange={hendleChange}
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              value={email}
-              autoFocus
-            />
-            <TextField
-              onChange={hendleChange}
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              value={password}
-            />
+            {errors.email ? (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                error
+                id="outlined-error"
+                label="Incorrect Email"
+                name="email"
+                {...register("email", {
+                  required: true,
+                  pattern: /^\S+@\S+$/i,
+                })}
+                autoFocus
+                helperText="example@example.com."
+              />
+            ) : (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                {...register("email", {
+                  required: true,
+                  pattern: /^\S+@\S+$/i,
+                })}
+                autoFocus
+              />
+            )}
+
+            {errors.password ? (
+              <TextField
+                error
+                id="outlined-error"
+                label="Incorrect Password"
+                required
+                margin="normal"
+                fullWidth
+                name="password"
+                type="password"
+                {...register("password", {
+                  required: true,
+                  pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                })}
+                helperText="Min 8 numbers and letters."
+              />
+            ) : (
+              <TextField
+                required
+                fullWidth
+                margin="normal"
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                {...register("password", {
+                  required: true,
+                  pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                })}
+              />
+            )}
 
             <Button
               type="submit"
